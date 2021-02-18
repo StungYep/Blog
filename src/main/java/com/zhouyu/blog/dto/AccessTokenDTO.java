@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+
+/**
+ * 用户登录所携带的信息
+ */
 @Data
 @ToString
 @AllArgsConstructor

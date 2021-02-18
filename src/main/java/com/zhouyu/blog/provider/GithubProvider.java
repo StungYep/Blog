@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GithubProvider {
 
-    //发送一个post请求
+    //得到网址， 从网址中提取出token
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -22,14 +22,16 @@ public class GithubProvider {
         try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
             String token = string.split("&")[0].split("=")[1];
-            return token;
+            return token;           //拿到access_token
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public GithubUser getUser(String accessToken) {     //获得网址，并将其转换为java对象
+
+    //得到网页中User的信息， 并将json格式转换为java对象返回
+    public GithubUser getUser(String accessToken) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://api.github.com/user")

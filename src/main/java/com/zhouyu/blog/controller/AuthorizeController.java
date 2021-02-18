@@ -39,7 +39,7 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(redirectUri);
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser user = githubProvider.getUser(accessToken);
+        GithubUser user = githubProvider.getUser(accessToken);   //提取出的Java对象
         System.out.println(user.getName());
         System.out.println(user.getId());
         System.out.println("bio = " + user.getBio());
