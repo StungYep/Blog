@@ -1,5 +1,6 @@
 package com.zhouyu.blog.controller;
 
+import com.sun.deploy.net.HttpResponse;
 import com.zhouyu.blog.dto.AccessTokenDTO;
 import com.zhouyu.blog.dto.GithubUser;
 import com.zhouyu.blog.mapper.UserMapper;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 /**
@@ -38,7 +41,8 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name="state") String state,
-                           HttpServletRequest request) {
+                           HttpServletRequest request,
+                           HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
 
         accessTokenDTO.setCode(code);
@@ -54,13 +58,16 @@ public class AuthorizeController {
             //做登录成功写cookie和session
             request.getSession().setAttribute("user", githubUser);
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModify(user.getGmtCreate());
-
             userMapper.insert(user);        //将User写入数据库
+
+            //写入cookie
+            response.addCookie(new Cookie("token", token));
             return "redirect:/";
         }
         else {

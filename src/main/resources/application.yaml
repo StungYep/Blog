@@ -4,3 +4,9 @@ spring:
     url: jdbc:mysql://localhost:3306/blog?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     username: root
     password:
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    check-location: true
+    baseline-on-migrate: true
