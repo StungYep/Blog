@@ -1,6 +1,6 @@
 package com.zhouyu.blog.controller;
 
-import com.zhouyu.blog.dto.Question;
+import com.zhouyu.blog.model.Question;
 import com.zhouyu.blog.mapper.QuestionMapper;
 import com.zhouyu.blog.mapper.UserMapper;
 import com.zhouyu.blog.model.User;
@@ -56,14 +56,16 @@ public class PublishController {
 
         User user = null;
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals("token")) {
-                String token = cookie.getValue();
-                user = userMapper.findByToken(token);     //获得到登录的用户
-                if(user != null) {
-                    request.getSession().setAttribute("user", user);
+        if(cookies != null && cookies.length != 0) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    user = userMapper.findByToken(token);     //获得到登录的用户
+                    if (user != null) {
+                        request.getSession().setAttribute("user", user);
+                    }
+                    break;
                 }
-                break;
             }
         }
         if(user == null) {

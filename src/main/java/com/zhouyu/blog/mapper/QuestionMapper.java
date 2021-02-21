@@ -1,6 +1,6 @@
 package com.zhouyu.blog.mapper;
 
-import com.zhouyu.blog.dto.Question;
+import com.zhouyu.blog.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Controller;

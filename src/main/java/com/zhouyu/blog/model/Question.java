@@ -1,4 +1,4 @@
-package com.zhouyu.blog.dto;
+package com.zhouyu.blog.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
