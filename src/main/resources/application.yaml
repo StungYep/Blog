@@ -10,3 +10,7 @@ spring:
     locations: classpath:db/migration
     check-location: true
     baseline-on-migrate: true
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
