@@ -11,6 +11,10 @@ spring:
     check-location: true
     baseline-on-migrate: true
 
+  devtools:
+    restart:
+      exclude: static/**,public/**
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
