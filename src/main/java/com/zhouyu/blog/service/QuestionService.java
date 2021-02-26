@@ -26,6 +26,10 @@ public class QuestionService {
         Integer totalCount = questionMapper.count();    //总问题数
         Integer totalPage = totalCount / size;         //用户问题总页数
         if(totalCount % size > 0) totalPage++;          //问题总页码数
+        totalPage = Math.max(1, totalPage);
+
+        System.out.println("totalpage = " + totalPage + "; totalcount = " + totalCount);
+
         PaginationDTO paginationDTO = new PaginationDTO();
         page = Math.min(Math.max(page, 1), totalPage);
         paginationDTO.setPagination(totalPage, page);   //设置需要显示的页码
@@ -46,12 +50,11 @@ public class QuestionService {
     }
 
     public PaginationDTO listByUserId(Integer userId, Integer page, Integer size) {
-        System.out.println("userId = " + userId);
         Integer totalCount = questionMapper.countByUserId(userId);    //用户提问的问题总数
-        System.out.println("totalCount = " + totalCount);
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage = totalCount / size;         //用户问题总页数
         if(totalCount % size > 0) totalPage++;
+        totalPage = Math.max(1, totalPage);
         page = Math.min(Math.max(page, 1), totalPage);
         paginationDTO.setPagination(totalPage, page);   //设置需要显示的页码
 
@@ -69,5 +72,14 @@ public class QuestionService {
         paginationDTO.setQuestions(questionDTOList);        //设置当前页面需要显示的问题
 
         return paginationDTO;
+    }
+
+    public QuestionDTO getById(Integer id) {
+        QuestionDTO questionDTO = new QuestionDTO();
+        Question question = questionMapper.getById(id);
+        BeanUtils.copyProperties(question, questionDTO);
+        User user = userMapper.findById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
     }
 }

@@ -2,7 +2,6 @@ package com.zhouyu.blog.controller;
 
 import com.zhouyu.blog.model.Question;
 import com.zhouyu.blog.mapper.QuestionMapper;
-import com.zhouyu.blog.mapper.UserMapper;
 import com.zhouyu.blog.model.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,6 @@ public class PublishController {
 
     @Autowired
     QuestionMapper questionMapper;
-
-    @Autowired
-    UserMapper userMapper;
 
     @GetMapping("/publish")
     public String publish() {
@@ -54,20 +50,7 @@ public class PublishController {
             return "publish";
         }
 
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null && cookies.length != 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);     //获得到登录的用户
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-        }
+        User user = (User) request.getSession().getAttribute("user");
         if(user == null) {
             model.addAttribute("error", "用户未登录");
             return "publish";

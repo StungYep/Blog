@@ -1,11 +1,13 @@
 package com.zhouyu.blog.mapper;
 
+import com.zhouyu.blog.dto.QuestionDTO;
 import com.zhouyu.blog.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -26,4 +28,7 @@ public interface QuestionMapper {
 
     @Select("select count(1) from question where creator = #{userId}")
     Integer countByUserId(@Param(value = "userId") Integer userId);
+
+    @Select("select * from question where id = #{id}")
+    Question getById(@Param(value = "id") Integer Id);
 }

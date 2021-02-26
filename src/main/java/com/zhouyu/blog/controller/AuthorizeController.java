@@ -6,6 +6,7 @@ import com.zhouyu.blog.dto.GithubUser;
 import com.zhouyu.blog.mapper.UserMapper;
 import com.zhouyu.blog.model.User;
 import com.zhouyu.blog.provider.GithubProvider;
+import com.zhouyu.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,9 @@ public class AuthorizeController {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name="state") String state,
@@ -62,10 +66,8 @@ public class AuthorizeController {
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModify(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatar_url());
-            userMapper.insert(user);        //将User写入数据库
+            userService.createOrUpdate(user);   //将User写入数据库或更新用户
 
             //写入cookie
             response.addCookie(new Cookie("token", token));
@@ -75,5 +77,15 @@ public class AuthorizeController {
             //登录失败， 从新登录
             return "redirect:index";
         }
+    }
+
+    @GetMapping("/logout")
+    public String Logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        request.getSession().removeAttribute("user");       //删除session
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);                                  //删除cookie
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
