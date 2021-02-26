@@ -27,11 +27,9 @@ public class PaginationDTO {
     private Integer totalPage;
 
     //设置分页需要显示的信息
-    public void setPagination(Integer totalCount, Integer page, Integer size) {
+    public void setPagination(Integer totalPage, Integer page) {
         this.page = page;
-        totalPage = totalCount / size;
-        if(totalCount % size > 0) totalPage++;
-        page = Math.min(Math.max(page, 1), totalPage);   //容错小于1和大于totalPage的page
+        this.totalPage = totalPage;
 
         pages.add(page);
         for(int i = 1; i <= 3; ++i) {
@@ -44,6 +42,6 @@ public class PaginationDTO {
         showPreviousPage = page != 1;
         showNextPage = !page.equals(totalPage);
         showFirstPage = !pages.contains(1);
-        showEndPage = !pages.contains(totalCount);
+        showEndPage = !pages.contains(totalPage);
     }
 }
