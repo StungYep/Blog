@@ -2,6 +2,8 @@ package com.zhouyu.blog.service;
 
 import com.zhouyu.blog.dto.PaginationDTO;
 import com.zhouyu.blog.dto.QuestionDTO;
+import com.zhouyu.blog.exception.CustomizeErrorCode;
+import com.zhouyu.blog.exception.CustomizeException;
 import com.zhouyu.blog.mapper.QuestionMapper;
 import com.zhouyu.blog.mapper.UserMapper;
 import com.zhouyu.blog.model.Question;
@@ -83,18 +85,21 @@ public class QuestionService {
     public QuestionDTO getById(Integer id) {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }
 
-    public Question createOrUpdate(Question question) {
-        if(question.getId() == null) {
+    public void createOrUpdate(Question question) {
+        if(question.getId() == null) {   //创建问题
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.insert(question);   //创建问题
-        } else {
+            questionMapper.insert(question);
+        } else {        //更新问题
             Question updateQuestion = new Question();
             updateQuestion.setGmtModified(System.currentTimeMillis());
             updateQuestion.setTitle(question.getTitle());
@@ -103,8 +108,11 @@ public class QuestionService {
 
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, questionExample);    //更新问题
+            int updated = questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            if(updated != 1) {
+                //更新失败
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
-        return null;
     }
 }
