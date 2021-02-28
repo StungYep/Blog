@@ -1,6 +1,5 @@
 package com.zhouyu.blog.controller;
 
-import com.sun.deploy.net.HttpResponse;
 import com.zhouyu.blog.dto.AccessTokenDTO;
 import com.zhouyu.blog.dto.GithubUser;
 import com.zhouyu.blog.mapper.UserMapper;

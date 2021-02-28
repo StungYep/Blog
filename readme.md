@@ -23,3 +23,6 @@ OAuth 授权流程如下：
 3.  A 网站拿到授权码后，就在后端，向认证服务器 B 网站请求令牌。在请求的时候回携带 $$client\_id\ 和\  client\_secret$$  ，用于认证服务器验证 A 的身份。
 4.  B 网站收到请求后会发放令牌，即向 $$redirect\_url$$ 中发送一段 $$json$$ 数据，其中会有 $$access\_token$$ 即令牌和其他的 json 格式的用户信息，这里可以用 $$fastjson$$ 将其转换为 java 对象。
 5.  A 网站拿到令牌后就可以实现登录功能。（token 会定时刷新，所以还需要验证 token 的有效性）。
+
+mybatis-generator命令：mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+
