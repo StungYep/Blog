@@ -102,6 +102,9 @@ public class QuestionService {
         if(question.getId() == null) {   //创建问题
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setLikeCount(0);
+            question.setViewCount(0);
+            question.setCommentCount(0);
             questionMapper.insert(question);
         } else {        //更新问题
             Question updateQuestion = new Question();
