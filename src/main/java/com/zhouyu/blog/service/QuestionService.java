@@ -4,6 +4,7 @@ import com.zhouyu.blog.dto.PaginationDTO;
 import com.zhouyu.blog.dto.QuestionDTO;
 import com.zhouyu.blog.exception.CustomizeErrorCode;
 import com.zhouyu.blog.exception.CustomizeException;
+import com.zhouyu.blog.mapper.QuestionExtMapper;
 import com.zhouyu.blog.mapper.QuestionMapper;
 import com.zhouyu.blog.mapper.UserMapper;
 import com.zhouyu.blog.model.Question;
@@ -25,6 +26,9 @@ public class QuestionService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
         Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());    //总问题数, count(1) from question
@@ -114,5 +118,17 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    public void incView(Integer id) {
+        /**
+         *   Question question = questionMapper.selectByPrimaryKey(id);
+         *   updateQuestion.setViewCount(question.getViewCount() + 1);
+         *   上面这种更新会导致并发错误
+         */
+        Question question = new Question();
+        question.setViewCount(1);
+        question.setId(id);
+        questionExtMapper.incView(question);
     }
 }

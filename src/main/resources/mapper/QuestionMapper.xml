@@ -190,12 +190,10 @@
       This element was generated on Sat Feb 27 23:45:35 GMT+08:00 2021.
     -->
     insert into question (id, title, gmt_create, 
-      gmt_modified, creator, comment_count, 
-      view_count, like_count, tag, 
+      gmt_modified, creator, tag,
       description)
     values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=BIGINT}, 
-      #{gmtModified,jdbcType=BIGINT}, #{creator,jdbcType=INTEGER}, #{commentCount,jdbcType=INTEGER}, 
-      #{viewCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR}, 
+      #{gmtModified,jdbcType=BIGINT}, #{creator,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR},
       #{description,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhouyu.blog.model.Question">

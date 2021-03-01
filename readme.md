@@ -26,3 +26,4 @@ OAuth 授权流程如下：
 
 mybatis-generator命令：mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 
+目前的问题：出错时候的图片 + 页面左上角的发布图标的问题
