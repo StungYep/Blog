@@ -40,5 +40,6 @@
             <!--添加属性useActualColumnNames为true,那么生成的对象字段就跟表一样-->
         </table>
         <table schema="blog" tableName="question" domainObjectName="Question"/>
+        <table schema="blog" tableName="comment" domainObjectName="Comment"/>
     </context>
 </generatorConfiguration>
