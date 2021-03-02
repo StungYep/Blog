@@ -76,6 +76,7 @@ public class CommentService {
         //按照是评论问题的评论的问题ID来查
         commentExample.createCriteria().
                 andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.Question.getType());
+        commentExample.setOrderByClause("gmt_create desc");   //按创建时间倒叙排序
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         if(comments.size() == 0) {
             return new ArrayList<>();
