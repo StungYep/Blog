@@ -1,9 +1,8 @@
 package com.zhouyu.blog.controller;
 
-import com.zhouyu.blog.dto.CommentDTO;
+import com.zhouyu.blog.dto.CommentCreateDTO;
 import com.zhouyu.blog.dto.ResultDTO;
 import com.zhouyu.blog.exception.CustomizeErrorCode;
-import com.zhouyu.blog.mapper.CommentMapper;
 import com.zhouyu.blog.model.Comment;
 import com.zhouyu.blog.model.User;
 import com.zhouyu.blog.service.CommentService;
@@ -24,7 +23,7 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDTO commentDTO, HttpServletRequest request) {
+    public Object post(@RequestBody CommentCreateDTO commentCreateDTO, HttpServletRequest request) {
 
         User user = (User) request.getSession().getAttribute("user");
         if(user == null) {
@@ -33,9 +32,9 @@ public class CommentController {
         }
 
         Comment comment = new Comment();
-        comment.setParentId(commentDTO.getParentId());
-        comment.setContent(commentDTO.getContent());
-        comment.setType(commentDTO.getType());
+        comment.setParentId(commentCreateDTO.getParentId());
+        comment.setContent(commentCreateDTO.getContent());
+        comment.setType(commentCreateDTO.getType());
         comment.setGmtModified(System.currentTimeMillis());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setCommentator(user.getId());

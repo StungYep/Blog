@@ -1,16 +1,24 @@
 package com.zhouyu.blog.service;
 
+import com.zhouyu.blog.dto.CommentDTO;
 import com.zhouyu.blog.enums.CommentTypeEnum;
 import com.zhouyu.blog.exception.CustomizeErrorCode;
 import com.zhouyu.blog.exception.CustomizeException;
 import com.zhouyu.blog.mapper.CommentMapper;
 import com.zhouyu.blog.mapper.QuestionExtMapper;
 import com.zhouyu.blog.mapper.QuestionMapper;
-import com.zhouyu.blog.model.Comment;
-import com.zhouyu.blog.model.Question;
+import com.zhouyu.blog.mapper.UserMapper;
+import com.zhouyu.blog.model.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 评论异常处理
@@ -26,6 +34,9 @@ public class CommentService {
 
     @Autowired
     private QuestionExtMapper questionExtMapper;
+    
+    @Autowired
+    private UserMapper userMapper;
 
     @Transactional    //申明事务
     public void insert(Comment comment) {
@@ -57,5 +68,37 @@ public class CommentService {
             question.setCommentCount(1);
             questionExtMapper.incCommentCount(question);
         }
+    }
+
+    //根据问题的ID
+    public List<CommentDTO> listByQuestionId(Long id) {
+        CommentExample commentExample = new CommentExample();
+        //按照是评论问题的评论的问题ID来查
+        commentExample.createCriteria().
+                andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.Question.getType());
+        List<Comment> comments = commentMapper.selectByExample(commentExample);
+        if(comments.size() == 0) {
+            return new ArrayList<>();
+        }
+        //得到评论者的ID
+        Set<Long> collect = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
+        List<Long> userIds = new ArrayList<>();
+        userIds.addAll(collect);
+
+        //根据评论ID找到其User
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdIn(userIds);
+        List<User> users = userMapper.selectByExample(userExample);
+        Map<Long, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
+
+        //转换 comment 称为commentDTO
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        for (Comment comment : comments) {
+            CommentDTO commentDTO = new CommentDTO();
+            BeanUtils.copyProperties(comment, commentDTO);
+            commentDTO.setUser(userMap.get(comment.getCommentator()));
+            commentDTOS.add(commentDTO);
+        }
+        return commentDTOS;
     }
 }
