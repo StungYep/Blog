@@ -10,6 +10,7 @@ import com.zhouyu.blog.model.Comment;
 import com.zhouyu.blog.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 评论异常处理
@@ -26,6 +27,7 @@ public class CommentService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
+    @Transactional    //申明事务
     public void insert(Comment comment) {
         if(comment.getParentId() == null || comment.getParentId() == 0) {
             //问题不存在了
@@ -38,7 +40,7 @@ public class CommentService {
         }
 
         if(comment.getType() == CommentTypeEnum.COMMENT.getType()) {
-            //回复评论
+            //回复评论， 2
             Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
             if(dbComment == null) {
                 //评论不存在
@@ -46,7 +48,7 @@ public class CommentService {
             }
             commentMapper.insert(comment);
         } else {
-            //回复问题
+            //回复问题， 1
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
             if(question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
