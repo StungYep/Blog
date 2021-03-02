@@ -25,7 +25,7 @@ public class PublishController {
     QuestionService questionService;
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable("id") Integer id,  //问题的id
+    public String edit(@PathVariable("id") Long id,  //问题的id
                        Model model) {
         QuestionDTO question = questionService.getById(id);
         model.addAttribute("title", question.getTitle());       //添加到Model中是为了回显到页面中去
@@ -44,7 +44,7 @@ public class PublishController {
     public String doPublish(@RequestParam(value = "title", required = false) String title,
                             @RequestParam(value = "description", required = false) String description,
                             @RequestParam(value = "tag", required = false) String tag,
-                            @RequestParam(value = "id", required = false) Integer id,
+                            @RequestParam(value = "id", required = false) Long id,
                             HttpServletRequest request,
                             Model model) {
         model.addAttribute("title", title);

@@ -57,7 +57,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO listByUserId(Integer userId, Integer page, Integer size) {
+    public PaginationDTO listByUserId(Long userId, Integer page, Integer size) {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(userId);
         Integer totalCount = (int) questionMapper.countByExample(questionExample);  //用户提问的问题总数,countByUserId
@@ -86,7 +86,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(id);
         if(question == null) {
@@ -123,7 +123,7 @@ public class QuestionService {
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         /**
          *   Question question = questionMapper.selectByPrimaryKey(id);
          *   updateQuestion.setViewCount(question.getViewCount() + 1);

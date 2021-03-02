@@ -4,6 +4,9 @@ import com.zhouyu.blog.exception.CustomizeErrorCode;
 import com.zhouyu.blog.exception.CustomizeException;
 import lombok.Data;
 
+/**
+ *  返回json格式
+ */
 @Data
 public class ResultDTO {
     private Integer code;
