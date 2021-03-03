@@ -1,8 +1,4 @@
 /**
- * Created by codedrinker on 2019/6/1.
- */
-
-/**
  * 提交回复
  */
 function post() {
@@ -135,7 +131,7 @@ function selectTag(e) {
             //即value的前一个和后一个字符都是逗号","或者没有字符时，才说明value是一个独立的标签
             if ((index == 0 || previous.charAt(index - 1) == ",")
                 && (index + value.length == previous.length || previous.charAt(index + value.length) == ",")
-               ) {
+            ) {
                 appear = true;
                 break;
             }

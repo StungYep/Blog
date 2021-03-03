@@ -4,10 +4,7 @@ import com.zhouyu.blog.dto.CommentDTO;
 import com.zhouyu.blog.enums.CommentTypeEnum;
 import com.zhouyu.blog.exception.CustomizeErrorCode;
 import com.zhouyu.blog.exception.CustomizeException;
-import com.zhouyu.blog.mapper.CommentMapper;
-import com.zhouyu.blog.mapper.QuestionExtMapper;
-import com.zhouyu.blog.mapper.QuestionMapper;
-import com.zhouyu.blog.mapper.UserMapper;
+import com.zhouyu.blog.mapper.*;
 import com.zhouyu.blog.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,9 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private CommentExtMapper commentExtMapper;
+
     @Transactional    //申明事务
     public void insert(Comment comment) {
         if(comment.getParentId() == null || comment.getParentId() == 0) {
@@ -57,6 +57,8 @@ public class CommentService {
                 //评论不存在
                 throw new CustomizeException((CustomizeErrorCode.COMMENT_NOT_FOUND));
             }
+            dbComment.setCommentCount(1);
+            commentExtMapper.incCommentCount(dbComment);
             commentMapper.insert(comment);
         } else {
             //回复问题， 1
@@ -70,12 +72,12 @@ public class CommentService {
         }
     }
 
-    //根据问题的ID
-    public List<CommentDTO> listByQuestionId(Long id) {
+    //根据目标对象（问题或评论)的 ID 来查找其的评论
+    public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum commentTypeEnum) {
         CommentExample commentExample = new CommentExample();
         //按照是评论问题的评论的问题ID来查
         commentExample.createCriteria().
-                andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.Question.getType());
+                andParentIdEqualTo(id).andTypeEqualTo(commentTypeEnum.getType());
         commentExample.setOrderByClause("gmt_create desc");   //按创建时间倒叙排序
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         if(comments.size() == 0) {

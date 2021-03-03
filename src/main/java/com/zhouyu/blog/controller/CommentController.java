@@ -1,26 +1,30 @@
 package com.zhouyu.blog.controller;
 
 import com.zhouyu.blog.dto.CommentCreateDTO;
+import com.zhouyu.blog.dto.CommentDTO;
 import com.zhouyu.blog.dto.ResultDTO;
+import com.zhouyu.blog.enums.CommentTypeEnum;
 import com.zhouyu.blog.exception.CustomizeErrorCode;
+import com.zhouyu.blog.mapper.QuestionMapper;
 import com.zhouyu.blog.model.Comment;
 import com.zhouyu.blog.model.User;
 import com.zhouyu.blog.service.CommentService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class CommentController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private QuestionMapper questionMapper;
 
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
@@ -46,5 +50,12 @@ public class CommentController {
         comment.setLikeCount(0L);
         commentService.insert(comment);
         return ResultDTO.okof();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Long id) {
+        List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
+        return ResultDTO.okof(commentDTOS);
     }
 }
