@@ -6,5 +6,5 @@ create table comment
     commentator int not null,
     gmt_create bigint not null,
     gmt_modified bigint not null,
-    like_count bigint default 0
+    like_count bigint not null default 0
 );

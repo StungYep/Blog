@@ -57,15 +57,18 @@ public class CommentService {
                 //评论不存在
                 throw new CustomizeException((CustomizeErrorCode.COMMENT_NOT_FOUND));
             }
+            comment.setCommentCount(0);
+            commentMapper.insert(comment);
             dbComment.setCommentCount(1);
             commentExtMapper.incCommentCount(dbComment);
-            commentMapper.insert(comment);
+
         } else {
             //回复问题， 1
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
             if(question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
+            comment.setCommentCount(0);
             commentMapper.insert(comment);
             question.setCommentCount(1);
             questionExtMapper.incCommentCount(question);
