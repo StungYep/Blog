@@ -15,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class PaginationDTO {
-    private List<QuestionDTO> questions;     //当前页的问题
+public class PaginationDTO<T> {
+    private List<T> data;     //当前页的问题或通知，Question Or Notification
     private boolean showPreviousPage; //前一页
     private boolean showNextPage;     //后一页
     private boolean showFirstPage;    //第一页

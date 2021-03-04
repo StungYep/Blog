@@ -41,5 +41,6 @@
         </table>
         <table schema="blog" tableName="question" domainObjectName="Question"/>
         <table schema="blog" tableName="comment" domainObjectName="Comment"/>
+        <table schema="blog" tableName="notification" domainObjectName="Notification"/>
     </context>
 </generatorConfiguration>

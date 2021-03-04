@@ -57,7 +57,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestions(questionDTOList);        //设置当前页面需要显示的问题
+        paginationDTO.setData(questionDTOList);        //设置当前页面需要显示的问题
 
         return paginationDTO;
     }
@@ -86,7 +86,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestions(questionDTOList);        //设置当前页面需要显示的问题
+        paginationDTO.setData(questionDTOList);        //设置当前页面需要显示的问题
 
         return paginationDTO;
     }
